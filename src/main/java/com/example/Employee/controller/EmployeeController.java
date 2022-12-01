@@ -4,6 +4,7 @@ import com.example.Employee.entity.EmployeeEntity;
 import com.example.Employee.model.Employee;
 import com.example.Employee.services.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,9 +20,16 @@ public class EmployeeController {
     @Autowired
     private final EmployeeService employeeService;
 
+    @Value("${server.port}")
+    private String serverPort;
 
     public EmployeeController(EmployeeService employeeService) {
         this.employeeService = employeeService;
+    }
+
+    @GetMapping("/")
+    public String hello() {
+        return serverPort;
     }
 
     @PostMapping("/employees")
@@ -45,8 +53,7 @@ public class EmployeeController {
 
     @GetMapping("/employees/{id}")
     public ResponseEntity<Employee> getEmployeeById(@PathVariable long id) {
-        Employee employee = null;
-        employee = employeeService.getEmployeeById(id);
+        Employee employee = employeeService.getEmployeeById(id);
         return ResponseEntity.ok(employee);
     }
 
